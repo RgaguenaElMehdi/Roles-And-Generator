@@ -1,0 +1,27 @@
+{
+    "name": "sysfast/roles",
+    "description": "roles",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "rgaguena",
+            "email": "dev.cirile@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Sysfast\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers" : [
+                 "Sysfast\\PermissionsServiceProvider",
+                 "Sysfast\\RolesServiceProvider",
+                "Sysfast\\MiddlewareServiceProvider",
+                 "Sysfast\\CrudServiceProvider"
+            ]
+        }
+    }
+}
