@@ -456,7 +456,7 @@ class generateCrud extends Command
 
             $this->createViewEdit($this->argument('name'),$json,$multimedia);
 
-            $text = "Route::middleware('auth')->resource('".strtolower($this->argument('name'))."s',App\Http\Controllers\\".$this->argument('name')."Controller::class);\n";
+            $text = "Route::resource('".strtolower($this->argument('name'))."s',App\Http\Controllers\\".$this->argument('name')."Controller::class);\n";
 
             file_put_contents('routes/web.php', $text,FILE_APPEND);
 

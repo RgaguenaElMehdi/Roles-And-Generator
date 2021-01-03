@@ -2,6 +2,7 @@
 namespace Sysfast;
 
 use Illuminate\Support\ServiceProvider;
+use File;
 
 class RolesServiceProvider extends ServiceProvider{
 
@@ -26,6 +27,8 @@ class RolesServiceProvider extends ServiceProvider{
 
         // Views
         $this->publishes([
+            __DIR__.'/views/roles' => base_path('resources/views/roles'),
+            __DIR__.'/Http/Controllers' => base_path('app/Http/Controllers'),
             __DIR__.'/views/layouts' => base_path('resources/views/layouts'),
             __DIR__.'/views/templates' => base_path('resources/views/templates'),
             __DIR__.'/seeders' => base_path('database/Models'),
@@ -33,6 +36,7 @@ class RolesServiceProvider extends ServiceProvider{
             __DIR__.'/migrations' => base_path('database/migrations'),
             __DIR__.'/Roles' => base_path('app/Traits'),
         ]);
+
     }
 
     public function register() {}

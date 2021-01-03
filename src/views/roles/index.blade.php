@@ -1,14 +1,14 @@
-@@extends('layouts.backend')
+@extends('layouts.backend')
 
-@@section('css')
+@section('css')
 
-<link rel="stylesheet" href="@{{ asset('assets/backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet"
-    href="@{{ asset('assets/backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    href="{{ asset('assets/backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 
-@@endsection
+@endsection
 
-@@section('content')
+@section('content')
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -33,10 +33,10 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">{{ $name }}s </h2>
+                        <h2 class="card-title">Roles </h2>
                         <h1 class="float-right">
                             <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px"
-                                href="{{ '{{' }} route('{{ $LCPName}}.create') }}">Ajouter</a>
+                                href="{{ route('roles.create') }}">Ajouter</a>
                         </h1>
 
                     </div>
@@ -45,40 +45,35 @@
                         <table id="indexTable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    @foreach($fields as $field)
-                                    @if(isset($field->index) && $field->index == true)
-                                    <th>{{$field->name }}</th>
-                                    @endif
-
-                                    @endforeach
-                                    <th>Action</th>
+                                                                                                            <th>name</th>
+                                    
+                                                                                                            <th>slug</th>
+                                    
+                                                                        <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
 
 
-                                @@foreach($items as $item)
+                                @foreach($items as $item)
                                 <tr>
-                                    @foreach($fields as $field)
-                                    @if(isset($field->index) && $field->index == true)
-                                    <td> {{ '{{' }} $item->{{$field->name }} }} </td>
-                                    @endif
-                                    @endforeach
-                                    <td>
+                                                                                                            <td> {{ $item->name }} </td>
+                                                                                                                                                <td> {{ $item->slug }} </td>
+                                                                                                            <td>
                                         <div class="btn-group">
-                                            <a href="{{ '{{' }} route('{{ $LCPName}}.edit', $item->id) }}"
+                                            <a href="{{ route('roles.edit', $item->id) }}"
                                                 class="btn btn-info"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ '{{' }} route('{{ $LCPName}}.destroy', $item->id) }}"
+                                            <form action="{{ route('roles.destroy', $item->id) }}"
                                                 method="POST">
-                                                @@csrf
-                                                @@method('DELETE')
+                                                @csrf
+                                                @method('DELETE')
                                                 <button type="submit" class="btn btn-info"><i
                                                         class="fas fa-trash"></i></button>
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
-                                @@endforeach
+                                @endforeach
 
                             </tbody>
 
@@ -89,13 +84,13 @@
         </div>
     </div>
 </section>
-@@endsection
-@@section('scripts')
+@endsection
+@section('scripts')
 
-<script src="@{{ asset('/assets/backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="@{{ asset('/assets/backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="@{{ asset('/assets/backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="@{{ asset('/assets/backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('/assets/backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('/assets/backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('/assets/backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('/assets/backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 
 <script>
     $(function () {
@@ -112,4 +107,4 @@
     });
 </script>
 
-@@endsection
+@endsection

@@ -13,142 +13,142 @@ use App\Models\{{$import}};
 class {{ $name }}Controller extends Controller
 {
 
-    public function index()
-    {
-        $items = {{ $name }}::all();
-        return view('{{ $LCPName }}.index',compact('items'));
-    }
+public function index()
+{
+$items = {{ $name }}::all();
+return view('{{ $LCPName }}.index',compact('items'));
+}
 
-    public function create()
-    {
-        @if(!empty($foreigns))
-          @php $compactVars = "" @endphp
-          @foreach($foreigns as $foreign)
-             @if(isset($foreign->field) && $foreign->type == "belongsTo")
-             ${{$foreign->field}}s = {{$foreign->fkClass}}::all('id','{{ $foreign->displayField}} as text');
-             @php $compactVars = $compactVars."'".$foreign->field."s'," @endphp
-             @endif
-          @endforeach
+public function create()
+{
+@if(!empty($foreigns))
+@php $compactVars = "" @endphp
+@foreach($foreigns as $foreign)
+@if(isset($foreign->field) && $foreign->type == "belongsTo")
+${{$foreign->field}}s = {{$foreign->fkClass}}::all('id','{{ $foreign->displayField}} as text');
+@php $compactVars = $compactVars."'".$foreign->field."s'," @endphp
+@endif
+@endforeach
 
-          @if( $compactVars != "")
-            return view('{{ $LCPName }}.create',compact({!! $compactVars !!}  ));
-          @else
-            return view('{{ $LCPName }}.create');
-          @endif
-        @else
+@if( $compactVars != "")
+return view('{{ $LCPName }}.create',compact({!! $compactVars !!} ));
+@else
+return view('{{ $LCPName }}.create');
+@endif
+@else
 
-          return view('{{ $LCPName }}.create');
+return view('{{ $LCPName }}.create');
 
-        @endif
-    }
+@endif
+}
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            @foreach($validations as $validation)
-                {!! $validation !!}
-            @endforeach
-        ]);
+public function store(Request $request)
+{
+$request->validate([
+@foreach($validations as $validation)
+{!! $validation !!}
+@endforeach
+]);
 
-        $requestData = $request->all();
+$requestData = $request->all();
 
-        @foreach($fields as $index=>$field)
-            @if( $field->type == 'boolean')
-                @include("templates.fields_form.checkbox_validation", ['name' => "$field->name"])
-            @endif
+@foreach($fields as $index=>$field)
+@if( $field->type == 'boolean')
+@include("templates.fields_form.checkbox_validation", ['name' => "$field->name"])
+@endif
 
-            @if(isset($field->file))
-                if($request->hasFile('{{$field->name}}')){
-                    $path = $request->{{$field->name}}->store('uploads','public');
-                    $requestData['{{$field->name}}'] = $path;
-                }
-            @endif
-        @endforeach
+@if(isset($field->file))
+if($request->hasFile('{{$field->name}}')){
+$path = $request->{{$field->name}}->store('uploads','public');
+$requestData['{{$field->name}}'] = $path;
+}
+@endif
+@endforeach
 
-        {{ $name }}::create($requestData);
+{{ $name }}::create($requestData);
 
-        return redirect()->route('{{ $LCPName }}.index')->with('success','created successfully');
-    }
+return redirect()->route('{{ $LCPName }}.index')->with('success','créé avec succès');
+}
 
-    public function edit($id)
-    {
+public function edit($id)
+{
 
-        $item = {{ $name }}::findOrFail($id);
+$item = {{ $name }}::findOrFail($id);
 
-        @if(!empty($foreigns))
-          @php $compactVars = "" @endphp
-          @foreach($foreigns as $foreign)
-              @if(isset($foreign->field) && $foreign->type == "belongsTo")
-             ${{$foreign->field}}s = {{$foreign->fkClass}}::all('id','{{$foreign->displayField}} as text');
-             @php $compactVars = $compactVars."'".$foreign->field."s'," @endphp
-             @endif
-          @endforeach
-          @if( $compactVars != "")
-          return view('{{ $LCPName }}.edit',compact('item',{!! $compactVars !!}));
-          @else
-          return view('{{ $LCPName }}.edit',compact('item'));
-          @endif
-        @else
+@if(!empty($foreigns))
+@php $compactVars = "" @endphp
+@foreach($foreigns as $foreign)
+@if(isset($foreign->field) && $foreign->type == "belongsTo")
+${{$foreign->field}}s = {{$foreign->fkClass}}::all('id','{{$foreign->displayField}} as text');
+@php $compactVars = $compactVars."'".$foreign->field."s'," @endphp
+@endif
+@endforeach
+@if( $compactVars != "")
+return view('{{ $LCPName }}.edit',compact('item',{!! $compactVars !!}));
+@else
+return view('{{ $LCPName }}.edit',compact('item'));
+@endif
+@else
 
-        return view('{{ $LCPName }}.edit',compact('item'));
+return view('{{ $LCPName }}.edit',compact('item'));
 
-        @endif
-
-
-
-    }
+@endif
 
 
 
-    public function show($id)
-    {
-        return view('{{ strtolower($name) }}s.show');
-    }
+}
 
 
-    public function update(Request $request, $id)
-    {
 
-        $item = {{ $name }}::findOrFail($id);
+public function show($id)
+{
+return view('{{ strtolower($name) }}s.show');
+}
 
-        $request->validate([
-            @foreach($validations as $validation)
-                {!! $validation !!}
-            @endforeach
-        ]);
 
-        $requestData = $request->all();
+public function update(Request $request, $id)
+{
 
-        @foreach($fields as $index=>$field)
-            @if( $field->type == 'boolean')
-                @include("templates.fields_form.checkbox_validation", ['name' => "$field->name"])
-            @endif
+$item = {{ $name }}::findOrFail($id);
 
-            @if(isset($field->file))
-                if($request->hasFile('{{$field->name}}')){
-                    $oldFilePath=public_path()."/storage/".$item->{{$field->name}};
-                    File::delete($oldFilePath);
-                    $path = $request->{{$field->name}}->store('uploads','public');
-                    $requestData['{{$field->name}}'] = $path;
-                }
-            @endif
+$request->validate([
+@foreach($validations as $validation)
+{!! $validation !!}
+@endforeach
+]);
 
-        @endforeach
+$requestData = $request->all();
 
-        $item->update($requestData);
+@foreach($fields as $index=>$field)
+@if( $field->type == 'boolean')
+@include("templates.fields_form.checkbox_validation", ['name' => "$field->name"])
+@endif
 
-        return redirect()->route('{{ $LCPName }}.index')->with('success','updated successfully');
-    }
+@if(isset($field->file))
+if($request->hasFile('{{$field->name}}')){
+$oldFilePath=public_path()."/storage/".$item->{{$field->name}};
+File::delete($oldFilePath);
+$path = $request->{{$field->name}}->store('uploads','public');
+$requestData['{{$field->name}}'] = $path;
+}
+@endif
 
-    public function destroy($id)
-    {
-        $item={{ $name }}::findOrFail($id);
-        @foreach($fields as $index=>$field)
-            @if(isset($field->file))
-                $item->delete{{$field->name}}();
-            @endif
-        @endforeach
-        $item->delete();
-        return redirect()->route('{{ $LCPName }}.index')->with('success','deleted successfully');
-    }
+@endforeach
+
+$item->update($requestData);
+
+return redirect()->route('{{ $LCPName }}.index')->with('success','Mis à jour avec succés');
+}
+
+public function destroy($id)
+{
+$item={{ $name }}::findOrFail($id);
+@foreach($fields as $index=>$field)
+@if(isset($field->file))
+$item->delete{{$field->name}}();
+@endif
+@endforeach
+$item->delete();
+return redirect()->route('{{ $LCPName }}.index')->with('success','Supprimé avec succès');
+}
 }
